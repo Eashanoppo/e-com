@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Ridy’s Hena Art | Premium Organic Mehendi",
     description: "100% Organic, Chemical-free Henna Cones for Bridal & Party Art.",
-    url: "https://ridy-heba.vercel.app",
+    url: "https://ridy-hena.vercel.app",
     siteName: "Ridy's Hena Art",
     images: [
       {
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     description: "Experience the purest form of botanical art. Organic, safe, and stunning.",
     images: ["/og-image.jpg"],
   },
-  metadataBase: new URL("https://ridy-heba.vercel.app"),
+  metadataBase: new URL("https://ridy-hena.vercel.app"),
 };
 
 export default function RootLayout({

@@ -13,13 +13,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
  
   return [
     {
-      url: 'https://ridy-heba.vercel.app',
+      url: 'https://ridy-hena.vercel.app',
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
     },
     {
-      url: 'https://ridy-heba.vercel.app/products',
+      url: 'https://ridy-hena.vercel.app/products',
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,

@@ -32,7 +32,7 @@ export default async function Home() {
             "@type": "Store",
             "name": "Ridy’s Hena Art",
             "description": "Premium organic herbal mehendi and bridal henna cones. 100% chemical-free natural stains.",
-            "url": "https://ridy-heba.vercel.app",
+            "url": "https://ridy-hena.vercel.app",
             "telephone": "+8801XXXXXXXXX",
             "address": {
               "@type": "PostalAddress",
