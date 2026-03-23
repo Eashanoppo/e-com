@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/admin/',
     },
-    sitemap: 'https://ridy-heba.vercel.app/sitemap.xml',
+    sitemap: 'https://ridy-hena.vercel.app/sitemap.xml',
   }
 }
