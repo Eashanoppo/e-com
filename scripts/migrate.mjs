@@ -1,6 +1,13 @@
-// Supabase Table Migration Script - Ridy's Hena Art
-const SUPABASE_URL = "***REMOVED***";
-const SERVICE_ROLE_KEY = "***REMOVED***";
+import dotenv from 'dotenv';
+dotenv.config();
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
+  console.error("❌ Error: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is not set in environment variables.");
+  process.exit(1);
+}
 
 async function checkTable(tableName) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${tableName}?limit=1`, {
@@ -13,8 +20,13 @@ async function checkTable(tableName) {
 }
 
 async function runSQL(statements) {
-  // Supabase Management API for DDL (table creation)
-  const projectRef = "yjchubtrofikkijuyubx";
+  // Extract project ref from URL
+  const projectRef = SUPABASE_URL.match(/https:\/\/(.*)\.supabase\.co/)?.[1];
+  
+  if (!projectRef) {
+    console.error("❌ Error: Could not determine project reference from SUPABASE_URL.");
+    return;
+  }
   
   for (const statement of statements) {
     const res = await fetch(`https://api.supabase.com/v1/projects/${projectRef}/database/query`, {
