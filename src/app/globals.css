@@ -42,11 +42,11 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-primary text-white px-10 py-4 h-14 rounded-button font-bold transition-all hover:bg-black hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center text-base shadow-premium;
+    @apply bg-primary text-white px-10 py-4 min-h-14 rounded-button font-bold transition-all hover:bg-black hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center text-base shadow-premium;
   }
   
   .btn-accent {
-    @apply bg-accent text-white px-10 py-4 h-14 rounded-button font-bold transition-all hover:bg-amber-950 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center text-base shadow-lg shadow-accent/20;
+    @apply bg-accent text-white px-10 py-4 min-h-14 rounded-button font-bold transition-all hover:bg-amber-950 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center text-base shadow-lg shadow-accent/20;
   }
 
   .glass {

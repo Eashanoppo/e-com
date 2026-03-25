@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import OrderModal from "./OrderModal";
+import { useCart } from "@/components/providers/CartContext";
 
 const variants = [
   { name: "Single Cone (25g)", price: 150, offerPrice: 120 },
@@ -12,6 +13,18 @@ const variants = [
 export default function ProductShowcase() {
   const [selectedVariant, setSelectedVariant] = useState(variants[1]);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const { addToCart, setIsCartOpen } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: "heritage-kit-" + selectedVariant.name.replace(/\s+/g, '-').toLowerCase(),
+      name: `Ridy’s Herbal Mehendi Kit (${selectedVariant.name})`,
+      price: selectedVariant.offerPrice,
+      quantity: 1,
+      image: "/product-1.jpg"
+    });
+    setIsCartOpen(true);
+  };
 
   const product = { name: "Ridy’s Herbal Mehendi Kit" };
 
@@ -91,8 +104,11 @@ export default function ProductShowcase() {
                 >
                   Secure Checkout (COD)
                 </button>
-                <button className="flex-1 border-2 border-primary/10 text-primary rounded-[20px] font-bold text-base hover:bg-primary hover:text-white transition-all">
-                  AddToBag
+                <button 
+                  onClick={handleAddToCart}
+                  className="flex-1 border-2 border-primary/10 text-primary rounded-[20px] font-bold text-base hover:bg-primary hover:text-white transition-all"
+                >
+                  Add To Bag
                 </button>
               </div>
             </motion.div>

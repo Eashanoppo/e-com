@@ -6,8 +6,7 @@ import dynamic from "next/dynamic";
 import { CartProvider } from "@/components/providers/CartContext";
 
 import ConditionalNavbar from "@/components/providers/ConditionalNavbar";
-import WhatsAppButton from "@/components/landing/WhatsAppButton";
-import AIChat from "@/components/landing/AIChat";
+import ConditionalFloatingActions from "@/components/providers/ConditionalFloatingActions";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -65,8 +64,7 @@ export default function RootLayout({
           <CartProvider>
             <ConditionalNavbar />
             {children}
-            <AIChat />
-            <WhatsAppButton />
+            <ConditionalFloatingActions />
           </CartProvider>
         </AuthContext>
       </body>

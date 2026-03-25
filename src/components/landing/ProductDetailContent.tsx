@@ -10,8 +10,7 @@ export default function ProductDetailContent({ product }: { product: any }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [activeAccordion, setActiveAccordion] = useState<string | null>("description");
-  const { addToCart } = useCart();
-
+  const { addToCart, setIsCartOpen } = useCart();
   const images = (product?.images && product.images.length > 0) ? product.images : ["/product-1.jpg"];
   const discount = (product?.price && product?.offer_price) 
     ? Math.round(((product.price - product.offer_price) / product.price) * 100) 
@@ -26,6 +25,7 @@ export default function ProductDetailContent({ product }: { product: any }) {
       image: images[0],
       quantity: quantity
     });
+    setIsCartOpen(true);
   };
 
   const toggleAccordion = (id: string) => {

@@ -31,6 +31,37 @@ export default function OrderModal({
   selectedVariant: any;
   initialQuantity?: number;
 }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
+
+  return (
+    <OrderModalContent 
+      isOpen={isOpen} 
+      onClose={onClose} 
+      product={product} 
+      selectedVariant={selectedVariant}
+      initialQuantity={initialQuantity}
+    />
+  );
+}
+
+function OrderModalContent({ 
+  isOpen, 
+  onClose, 
+  product, 
+  selectedVariant,
+  initialQuantity
+}: { 
+  isOpen: boolean; 
+  onClose: () => void;
+  product: any;
+  selectedVariant: any;
+  initialQuantity?: number;
+}) {
   const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);

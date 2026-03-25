@@ -245,9 +245,9 @@ function ProductFormModal({ product, onClose, onSuccess }: any) {
   };
 
   return (
-    <div className="fixed inset-0 z-[1001] flex items-center justify-center p-6 pb-20 overflow-y-auto">
+    <div className="fixed inset-0 z-[1001] overflow-y-auto flex items-start justify-center p-4 sm:p-6 md:p-10">
       <div className="fixed inset-0 bg-primary/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-8 border border-white animate-in zoom-in-95 duration-200 mt-20">
+      <div className="relative bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-6 sm:p-8 border border-white animate-in zoom-in-95 duration-200 mt-4 mb-10">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-heading text-primary">
             {product ? "Edit Product" : "New Botanical Product"}

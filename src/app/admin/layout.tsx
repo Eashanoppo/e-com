@@ -1,9 +1,10 @@
 "use client";
 import Link from "next/link";
-import { LayoutDashboard, ShoppingCart, Package, LogOut } from "lucide-react";
+import { LayoutDashboard, ShoppingCart, Package, LogOut, ArrowLeft, Menu, X, Home } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ADMIN_EMAIL = "ridyhena@gmail.com";
 
@@ -14,6 +15,7 @@ export default function AdminLayout({
 }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -47,33 +49,96 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-secondary">
+    <div className="flex min-h-screen bg-secondary relative">
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsSidebarOpen(false)}
+            className="fixed inset-0 bg-primary/40 backdrop-blur-sm z-40 lg:hidden"
+          />
+        )}
+      </AnimatePresence>
+
       {/* Sidebar */}
-      <aside className="w-64 bg-primary text-secondary p-6 flex flex-col shrink-0">
-        <div className="mb-10">
-          <h2 className="text-xl font-heading">RHA Admin</h2>
-          <p className="text-[10px] text-secondary/40 uppercase tracking-widest mt-1">Secure Panel</p>
+      <aside className={`
+        fixed inset-y-0 left-0 z-50 w-72 bg-primary text-secondary p-8 flex flex-col transform transition-transform duration-300 ease-in-out
+        lg:sticky lg:translate-x-0 lg:h-screen
+        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+      `}>
+        <div className="mb-10 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-heading text-white">RHA Admin</h2>
+            <p className="text-[10px] text-secondary/40 uppercase tracking-[0.2em] mt-1 font-bold">Secure Panel</p>
+          </div>
+          <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden p-2 hover:bg-white/10 rounded-xl transition-colors">
+            <X className="w-5 h-5 text-white" />
+          </button>
         </div>
-        <nav className="flex-1 space-y-2">
-          <Link href="/admin" className="flex items-center gap-3 p-3 rounded-button hover:bg-white/10 transition-colors text-sm font-medium">
-            <LayoutDashboard className="w-4 h-4" />
+
+        {/* Back to Website */}
+        <Link 
+          href="/" 
+          className="flex items-center gap-3 p-4 mb-8 rounded-2xl bg-white/5 hover:bg-white/10 transition-all border border-white/5 group"
+        >
+          <div className="w-8 h-8 rounded-xl bg-accent/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <ArrowLeft className="w-4 h-4 text-accent" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xs font-bold text-white">Back to site</span>
+            <span className="text-[8px] text-secondary/40 uppercase tracking-wider font-bold">View Storefront</span>
+          </div>
+        </Link>
+
+        <nav className="flex-1 space-y-2 overflow-y-auto pr-2 custom-scrollbar">
+          <Link 
+            href="/admin" 
+            onClick={() => setIsSidebarOpen(false)}
+            className="flex items-center gap-3 p-4 rounded-2xl hover:bg-white/10 transition-all text-sm font-bold group border border-transparent hover:border-white/5"
+          >
+            <div className="p-2 rounded-xl bg-secondary/10 text-secondary/60 group-hover:text-white transition-colors">
+              <LayoutDashboard className="w-4 h-4" />
+            </div>
             <span>Dashboard</span>
           </Link>
-          <Link href="/admin/orders" className="flex items-center gap-3 p-3 rounded-button hover:bg-white/10 transition-colors text-sm font-medium">
-            <ShoppingCart className="w-4 h-4" />
+          <Link 
+            href="/admin/orders" 
+            onClick={() => setIsSidebarOpen(false)}
+            className="flex items-center gap-3 p-4 rounded-2xl hover:bg-white/10 transition-all text-sm font-bold group border border-transparent hover:border-white/5"
+          >
+            <div className="p-2 rounded-xl bg-secondary/10 text-secondary/60 group-hover:text-white transition-colors">
+              <ShoppingCart className="w-4 h-4" />
+            </div>
             <span>Orders</span>
           </Link>
-          <Link href="/admin/products" className="flex items-center gap-3 p-3 rounded-button hover:bg-white/10 transition-colors text-sm font-medium">
-            <Package className="w-4 h-4" />
+          <Link 
+            href="/admin/products" 
+            onClick={() => setIsSidebarOpen(false)}
+            className="flex items-center gap-3 p-4 rounded-2xl hover:bg-white/10 transition-all text-sm font-bold group border border-transparent hover:border-white/5"
+          >
+            <div className="p-2 rounded-xl bg-secondary/10 text-secondary/60 group-hover:text-white transition-colors">
+              <Package className="w-4 h-4" />
+            </div>
             <span>Products</span>
           </Link>
         </nav>
-        <div className="pt-6 border-t border-white/10">
-          <p className="text-[10px] text-secondary/40 uppercase tracking-widest mb-3 px-3">Signed in as</p>
-          <p className="text-xs font-bold text-secondary/70 px-3 mb-4 truncate">{session.user?.email}</p>
+
+        <div className="pt-8 mt-6 border-t border-white/10">
+          <div className="flex items-center gap-3 px-4 mb-6">
+            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent font-heading text-lg border border-accent/20">
+              {session.user?.email?.[0].toUpperCase()}
+            </div>
+            <div className="flex flex-col truncate">
+              <p className="text-[10px] text-secondary/40 uppercase tracking-widest font-bold">Administrator</p>
+              <p className="text-xs font-bold text-secondary/80 truncate">{session.user?.email}</p>
+            </div>
+          </div>
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
-            className="flex items-center gap-3 p-3 w-full rounded-button hover:bg-red-500/20 text-red-300 transition-colors text-sm font-medium"
+            className="flex items-center gap-3 p-4 w-full rounded-2xl hover:bg-red-500/10 text-red-300 transition-all text-sm font-bold border border-transparent hover:border-red-500/20"
           >
             <LogOut className="w-4 h-4" />
             <span>Logout</span>
@@ -82,9 +147,26 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-10 overflow-y-auto">
-        {children}
-      </main>
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Mobile Header */}
+        <header className="lg:hidden bg-white border-b border-primary/5 p-4 flex items-center justify-between sticky top-0 z-30">
+          <button 
+            onClick={() => setIsSidebarOpen(true)}
+            className="p-3 bg-secondary rounded-2xl text-primary hover:bg-primary hover:text-white transition-all shadow-sm"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+          <div className="flex items-center gap-2">
+            <Home className="w-5 h-5 text-primary" />
+            <span className="font-heading text-lg text-primary">RHA Admin</span>
+          </div>
+          <div className="w-12 h-12" /> {/* Spacer */}
+        </header>
+
+        <main className="flex-1 p-6 lg:p-10">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

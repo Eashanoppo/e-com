@@ -1,13 +1,34 @@
 "use client";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import OrderModal from "./OrderModal";
 import { useCart } from "@/components/providers/CartContext";
+import { getProducts } from "@/lib/actions/products";
+import Link from "next/link";
+import { ShoppingBag } from "lucide-react";
 
 export default function PremiumCollection() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { addToCart } = useCart();
+  const { addToCart, setIsCartOpen } = useCart();
+  const [dbProducts, setDbProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const data = await getProducts();
+        // Take top 3 active products
+        const active = data.filter((p: any) => p.is_active).slice(0, 3);
+        setDbProducts(active);
+      } catch (err) {
+        console.error("Failed to fetch products for homepage:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchProducts();
+  }, []);
 
   const handleBuyNow = (product: any) => {
     setSelectedProduct(product);
@@ -18,11 +39,15 @@ export default function PremiumCollection() {
     addToCart({
       id: product.id.toString(),
       name: product.name,
-      price: product.offerPrice || product.price,
-      image: product.image,
+      price: product.offer_price || product.price,
+      image: product.images?.[0] || "/product-1.jpg",
       quantity: 1
     });
+    setIsCartOpen(true);
   };
+
+  // Fallback to static if no DB products
+  const displayProducts = dbProducts.length > 0 ? dbProducts : staticProducts;
 
   return (
     <section id="products" className="section-padding bg-background relative overflow-hidden">
@@ -43,8 +68,8 @@ export default function PremiumCollection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
-          {products.map((product, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 mb-16">
+          {displayProducts.map((product: any, i: number) => (
             <motion.div 
               key={product.id}
               initial={{ opacity: 0 }}
@@ -55,7 +80,7 @@ export default function PremiumCollection() {
             >
               <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden mb-8 bg-[#F5F5F3]">
                 <img 
-                  src={product.image} 
+                  src={product.images?.[0] || product.image || "/product-1.jpg"} 
                   alt={product.name} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out" 
                 />
@@ -72,7 +97,7 @@ export default function PremiumCollection() {
 
                 <div className="absolute top-6 left-6 glass px-4 py-1.5 rounded-full">
                   <span className="text-primary text-[10px] font-extrabold uppercase tracking-widest">
-                    {product.discount}
+                    {product.discount || (product.offer_price ? `${Math.round((1 - product.offer_price / product.price) * 100)}% OFF` : "Premium")}
                   </span>
                 </div>
               </div>
@@ -84,7 +109,7 @@ export default function PremiumCollection() {
                     <p className="text-[10px] font-bold text-textMuted uppercase tracking-widest mt-1">Limited Edition Hand-Poured</p>
                   </div>
                   <div className="flex flex-col items-end">
-                    <span className="text-2xl font-extrabold text-primary">৳{product.offerPrice}</span>
+                    <span className="text-2xl font-extrabold text-primary">৳{product.offer_price || product.offerPrice || product.price}</span>
                     <span className="text-xs text-textMuted line-through opacity-50">৳{product.price}</span>
                   </div>
                 </div>
@@ -107,6 +132,20 @@ export default function PremiumCollection() {
             </motion.div>
           ))}
         </div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="text-center"
+        >
+          <Link 
+            href="/products" 
+            className="inline-flex items-center gap-2 px-10 py-4 bg-primary text-white rounded-full font-bold hover:bg-accent transition-all group shadow-xl shadow-primary/10"
+          >
+            <ShoppingBag className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+            View All Products
+          </Link>
+        </motion.div>
       </div>
 
       {selectedProduct && (
@@ -114,14 +153,14 @@ export default function PremiumCollection() {
           isOpen={isModalOpen} 
           onClose={() => setIsModalOpen(false)} 
           product={selectedProduct} 
-          selectedVariant={selectedProduct.variant} 
+          selectedVariant={selectedProduct.variants?.[0] || selectedProduct.variant || { name: "Standard", offerPrice: selectedProduct.offer_price || selectedProduct.price }} 
         />
       )}
     </section>
   );
 }
 
-const products = [
+const staticProducts = [
   {
     id: 1,
     name: "Single Cone (25g)",

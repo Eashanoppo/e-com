@@ -5,19 +5,20 @@ import { Sparkles, Heart } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[90vh] lg:min-h-screen flex items-center bg-[#FDFBF7] overflow-hidden pt-20 lg:pt-0">
+    <section className="relative min-h-[90vh] lg:min-h-screen flex items-center bg-[#FDFBF7] overflow-hidden pt-20 lg:pt-20">
       
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-accent/5 rounded-full blur-[120px] animate-pulse" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: "2s" }} />
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('/mehendi-pattern.png')] bg-repeat bg-[length:300px]" />
+        {/* Decorative subtle texture instead of missing image */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#2D4030_1px,transparent_1px)] [background-size:20px_20px]" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center h-full">
         
         {/* CONTENT: Left Side */}
-        <div className="w-full lg:w-[45%] pt-10 pb-16 lg:py-0 lg:pr-12 order-2 lg:order-1 flex flex-col justify-center">
+        <div className="w-full lg:w-[45%] pt-10 pb-16 lg:py-12 lg:pr-12 order-2 lg:order-1 flex flex-col justify-center">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

@@ -5,7 +5,9 @@ import { LogIn } from "lucide-react";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-secondary flex items-center justify-center p-6 bg-[url('/mehendi-pattern.png')] bg-repeat bg-[length:200px] bg-opacity-5">
+    <div className="min-h-screen bg-secondary flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Decorative subtle texture instead of missing image */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#2D4030_1px,transparent_1px)] [background-size:20px_20px]" />
       <div className="bg-white/90 backdrop-blur-xl w-full max-w-[440px] rounded-3xl shadow-2xl p-12 border border-white/50 relative overflow-hidden text-center">
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-accent to-primary" />
         

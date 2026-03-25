@@ -2,10 +2,23 @@
 import { useState } from "react";
 import ProductCard from "./ProductCard";
 import OrderModal from "./OrderModal";
+import { useCart } from "@/components/providers/CartContext";
 
 export default function ProductGrid({ products }: { products: any[] }) {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { addToCart, setIsCartOpen } = useCart();
+
+  const handleAddToCart = (product: any) => {
+    addToCart({
+      id: product.id.toString(),
+      name: product.name,
+      price: product.offer_price || product.price,
+      quantity: 1,
+      image: product.images?.[0] || "/product-1.jpg"
+    });
+    setIsCartOpen(true);
+  };
 
   const handleOrder = (product: any) => {
     setSelectedProduct(product);
@@ -29,7 +42,7 @@ export default function ProductGrid({ products }: { products: any[] }) {
               image: product.images?.[0] || "/product-1.jpg",
               badge: product.offer_price ? "Special Offer" : undefined
             }}
-            onOrder={() => handleOrder(product)}
+            onOrder={() => handleAddToCart(product)}
           />
         ))}
       </div>
